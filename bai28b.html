@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game kiểm tra tốc độ phản xạ - Bài 28a</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #101827;
+    color: white;
+    padding: 20px;
+    transition: background 0.4s;
+}
+
+h1 {
+    color: #38bdf8;
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 20px auto;
+}
+
+.info div {
+    background: #1e293b;
+    padding: 12px 20px;
+    border-radius: 10px;
+    min-width: 110px;
+}
+
+.info span {
+    display: block;
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+#arena {
+    position: relative;
+    width: 700px;
+    height: 450px;
+    max-width: 100%;
+    margin: 20px auto;
+    border: 3px solid #38bdf8;
+    border-radius: 12px;
+    background: #243b55;
+    overflow: hidden;
+    transition: background 0.4s;
+}
+
+.target {
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+    animation: appear 0.2s ease-out;
+}
+
+.green {
+    background: #22c55e;
+    border: 3px solid #86efac;
+}
+
+.red {
+    background: #ef4444;
+    border: 3px solid #fca5a5;
+}
+
+.gold {
+    background: #facc15;
+    border: 3px solid #fef08a;
+    color: #422006;
+}
+
+@keyframes appear {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+button, select {
+    padding: 11px 18px;
+    margin: 5px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button {
+    font-weight: bold;
+}
+
+#startBtn {
+    background: #22c55e;
+    color: white;
+}
+
+#endBtn {
+    background: #ef4444;
+    color: white;
+}
+
+#colorBtn {
+    background: #8b5cf6;
+    color: white;
+}
+
+#playerBtn {
+    background: #0ea5e9;
+    color: white;
+}
+
+#timerBox {
+    width: 300px;
+    max-width: 90%;
+    height: 14px;
+    margin: 15px auto;
+    background: #334155;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#timerBar {
+    width: 100%;
+    height: 100%;
+    background: #22c55e;
+}
+
+#message {
+    min-height: 30px;
+    margin: 15px;
+    color: #facc15;
+    font-size: 18px;
+}
+
+#playerInfo {
+    margin: 15px;
+    color: #7dd3fc;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#timeChoice {
+    background: white;
+    color: black;
+}
+
+@media (max-width: 500px) {
+    body {
+        padding: 8px;
+    }
+
+    #arena {
+        height: 400px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<h1>GAME KIỂM TRA TỐC ĐỘ PHẢN XẠ</h1>
+<p>Click vào các mục tiêu càng nhanh càng tốt!</p>
+
+<div class="info">
+    <div>Điểm số<span id="score">0</span></div>
+    <div>Mạng sống<span id="lives">3</span></div>
+    <div>Cấp độ<span id="level">1</span></div>
+    <div>Thời gian<span id="time">30</span></div>
+</div>
+
+<div>
+    <label for="timeChoice">Chọn thời gian chơi: </label>
+    <select id="timeChoice">
+        <option value="15">15 giây</option>
+        <option value="30" selected>30 giây</option>
+        <option value="60">60 giây</option>
+        <option value="90">90 giây</option>
+    </select>
+</div>
+
+<div id="timerBox">
+    <div id="timerBar"></div>
+</div>
+
+<div id="arena"></div>
+
+<div>
+    <button id="startBtn">Bắt đầu chơi</button>
+    <button id="endBtn">Kết thúc</button>
+    <button id="colorBtn">Đổi màu nền ngẫu nhiên</button>
+    <button id="playerBtn">Người chơi</button>
+</div>
+
+<div id="playerInfo"></div>
+<div id="message">Chọn thời gian rồi nhấn Bắt đầu chơi!</div>
+
+<script>
+const arena = document.getElementById("arena");
+const scoreText = document.getElementById("score");
+const livesText = document.getElementById("lives");
+const levelText = document.getElementById("level");
+const timeText = document.getElementById("time");
+const timerBar = document.getElementById("timerBar");
+const message = document.getElementById("message");
+const playerInfo = document.getElementById("playerInfo");
+const timeChoice = document.getElementById("timeChoice");
+
+let score = 0;
+let lives = 3;
+let level = 1;
+let timeLeft = 30;
+let totalTime = 30;
+let running = false;
+
+let spawnTimer = null;
+let gameTimer = null;
+let targets = new Set();
+
+// Cập nhật giao diện
+function updateUI() {
+    scoreText.textContent = score;
+    livesText.textContent = lives;
+    levelText.textContent = level;
+    timeText.textContent = Math.max(0, Math.ceil(timeLeft));
+
+    timerBar.style.width =
+        Math.max(0, timeLeft / totalTime * 100) + "%";
+
+    timerBar.style.background =
+        timeLeft <= 5 ? "#ef4444" : "#22c55e";
+}
+
+// Xóa mục tiêu và bộ đếm
+function cleanup() {
+    clearInterval(spawnTimer);
+    clearInterval(gameTimer);
+
+    spawnTimer = null;
+    gameTimer = null;
+
+    targets.forEach(target => {
+        clearTimeout(target.expireTimer);
+        target.remove();
+    });
+
+    targets.clear();
+}
+
+// Kết thúc trò chơi và khóa thao tác
+function endGame(text) {
+    if (!running) return;
+
+    running = false;
+    cleanup();
+    updateUI();
+
+    message.textContent =
+        text + " Tổng số điểm đạt được: " + score + " điểm.";
+}
+
+// Tìm vị trí mục tiêu không chồng lên nhau
+function findPosition(size) {
+    const maxX = arena.clientWidth - size;
+    const maxY = arena.clientHeight - size;
+
+    for (let i = 0; i < 100; i++) {
+        const x = Math.random() * maxX;
+        const y = Math.random() * maxY;
+        let overlap = false;
+
+        targets.forEach(target => {
+            const ox = parseFloat(target.style.left);
+            const oy = parseFloat(target.style.top);
+
+            if (
+                Math.abs(x - ox) < size + 5 &&
+                Math.abs(y - oy) < size + 5
+            ) {
+                overlap = true;
+            }
+        });
+
+        if (!overlap) return { x, y };
+    }
+
+    return null;
+}
+
+// Tạo mục tiêu
+function createTarget() {
+    if (!running) return;
+
+    const pos = findPosition(48);
+    if (!pos) return;
+
+    const target = document.createElement("div");
+    const random = Math.random();
+
+    let type = "green";
+
+    if (random < 0.2) {
+        type = "red";
+    } else if (random < 0.4) {
+        type = "gold";
+    }
+
+    target.className = "target " + type;
+    target.style.left = pos.x + "px";
+    target.style.top = pos.y + "px";
+
+    target.textContent =
+        type === "green" ? "+1" :
+        type === "red" ? "-2" : "+3";
+
+    targets.add(target);
+    arena.appendChild(target);
+
+    const duration = type === "gold"
+        ? 1500
+        : Math.max(700, 2500 * Math.pow(0.85, level - 1));
+
+    target.expireTimer = setTimeout(() => {
+        if (!targets.has(target)) return;
+
+        targets.delete(target);
+        target.remove();
+
+        if (running && type === "gold") {
+            lives--;
+            updateUI();
+
+            if (lives <= 0) {
+                endGame("Bạn đã hết mạng!");
+            }
+        }
+    }, duration);
+}
+
+// Xử lý click mục tiêu
+arena.addEventListener("click", function(event) {
+    if (!running) return;
+
+    const target = event.target.closest(".target");
+
+    if (!target || !targets.has(target)) return;
+
+    clearTimeout(target.expireTimer);
+    targets.delete(target);
+
+    const type = target.classList.contains("green")
+        ? "green"
+        : target.classList.contains("red")
+        ? "red" : "gold";
+
+    if (type === "green") {
+        score++;
+        message.textContent = "Chính xác! +1 điểm";
+    } else if (type === "red") {
+        score = Math.max(0, score - 2);
+        message.textContent = "Trúng bẫy! -2 điểm";
+    } else {
+        score += 3;
+        timeLeft = Math.min(totalTime, timeLeft + 2);
+        message.textContent = "Mục tiêu vàng! +3 điểm";
+    }
+
+    target.remove();
+
+    const newLevel = Math.floor(score / 10) + 1;
+
+    if (newLevel > level) {
+        level = newLevel;
+
+        clearInterval(spawnTimer);
+
+        const delay = Math.max(
+            250,
+            900 * Math.pow(0.85, level - 1)
+        );
+
+        spawnTimer = setInterval(createTarget, delay);
+    }
+
+    updateUI();
+});
+
+// Bắt đầu chơi với thời gian được chọn
+function startGame() {
+    cleanup();
+
+    score = 0;
+    lives = 3;
+    level = 1;
+
+    totalTime = Number(timeChoice.value);
+    timeLeft = totalTime;
+
+    running = true;
+
+    playerInfo.textContent = "";
+    message.textContent = "Trò chơi bắt đầu!";
+
+    updateUI();
+
+    createTarget();
+
+    spawnTimer = setInterval(createTarget, 900);
+
+    gameTimer = setInterval(() => {
+        if (!running) return;
+
+        timeLeft = Math.max(0, timeLeft - 0.1);
+        updateUI();
+
+        if (timeLeft <= 0) {
+            endGame("Hết giờ!");
+        }
+    }, 100);
+}
+
+// Nút kết thúc
+document.getElementById("startBtn").addEventListener("click", startGame);
+
+document.getElementById("endBtn").addEventListener("click", () => {
+    if (running) {
+        endGame("Bạn đã kết thúc trò chơi!");
+    }
+});
+
+// Đổi màu nền ngẫu nhiên
+document.getElementById("colorBtn").addEventListener("click", () => {
+    const colors = [
+        "#1e3a8a",
+        "#14532d",
+        "#581c87",
+        "#7f1d1d",
+        "#164e63",
+        "#713f12",
+        "#374151",
+        "#312e81"
+    ];
+
+    const color = colors[
+        Math.floor(Math.random() * colors.length)
+    ];
+
+    arena.style.background = color;
+    message.textContent = "Đã đổi màu nền trò chơi!";
+});
+
+// Hiển thị mã sinh viên
+document.getElementById("playerBtn").addEventListener("click", () => {
+    playerInfo.textContent = "Người chơi: Phạm Đình Khương | MSSV: 231A011185";
+});
+</script>
+<a href="index.html" 
+   style="position: fixed; top: 25px; right: 25px; background: linear-gradient(135deg, #dcdae0, #d98896); color: #ffffff; padding: 10px 22px; border-radius: 20px; text-decoration: none; font-weight: 700; font-size: 0.95rem; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.3); z-index: 999999;">
+  ← Quay lại trang chủ
+</a>
+</body>
+</html>

@@ -1,0 +1,422 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Phạm Đình Khương</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        /* MENU */
+        nav {
+            background: #111827;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: #38bdf8;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        nav ul a {
+            color: white;
+            text-decoration: none;
+            padding: 9px 12px;
+            border-radius: 6px;
+            display: block;
+        }
+
+        nav ul a:hover {
+            background: #2563eb;
+        }
+
+        /* PHẦN GIỚI THIỆU */
+        .hero {
+            background: linear-gradient(135deg, #2563eb, #7c3aed);
+            color: white;
+            padding: 65px 20px;
+            text-align: center;
+        }
+
+        .avatar {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid white;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px #0003;
+        }
+
+        .avatar-fallback {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: white;
+            color: #4338ca;
+            font-size: 45px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            border: 5px solid white;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin: 5px 0;
+        }
+
+        .hero .intro {
+            margin: 15px auto 0;
+            max-width: 650px;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 30px;
+            color: #1d4ed8;
+            margin-bottom: 10px;
+        }
+
+        .section-desc {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        /* CÁC THẺ BÀI TẬP */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 18px #0f172a12;
+            border: 1px solid #e2e8f0;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px #0f172a20;
+        }
+
+        .task-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .task-card h3 {
+            font-size: 22px;
+            color: #1e40af;
+            margin-bottom: 8px;
+        }
+
+        .task-card p {
+            color: #64748b;
+            margin-bottom: 18px;
+        }
+
+        .task-link {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            padding: 10px 18px;
+            border-radius: 7px;
+            font-weight: bold;
+        }
+
+        .task-link:hover {
+            background: #1d4ed8;
+        }
+
+        /* HƯỚNG DẪN VÀ MÔ TẢ */
+        .info-box {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px #0f172a12;
+        }
+
+        .info-box h2 {
+            color: #1d4ed8;
+            margin-bottom: 15px;
+        }
+
+        .info-box p {
+            margin-bottom: 10px;
+        }
+
+        .info-box ul,
+        .info-box ol {
+            padding-left: 25px;
+        }
+
+        .info-box li {
+            margin-bottom: 8px;
+        }
+
+        footer {
+            background: #111827;
+            color: white;
+            text-align: center;
+            padding: 25px 15px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        @media (max-width: 700px) {
+            nav {
+                justify-content: center;
+            }
+
+            nav ul {
+                justify-content: center;
+            }
+
+            .hero {
+                padding: 45px 15px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .task-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MENU CHINH -->
+    <nav>
+        <div class="logo">KHUONG'S WEBSITE</div>
+
+        <ul>
+            <li><a href="#trang-chu">Trang chủ</a></li>
+            <li><a href="#bai-tap">Bài tập</a></li>
+            <li><a href="#huong-dan">Hướng dẫn</a></li>
+            <li><a href="#mo-ta">Mô tả trò chơi</a></li>
+        </ul>
+    </nav>
+
+    <!-- THONG TIN SINH VIEN -->
+    <header class="hero" id="trang-chu">
+
+        <img
+            src="https://scontent.fsgn5-15.fna.fbcdn.net/v/t39.30808-1/583923053_1187032030036283_6643598896699324605_n.jpg?stp=dst-jpg_tt6&cstp=mx1004x996&ctp=s200x200&_nc_cat=102&_nc_map=urlgen_bucketless&ccb=1-7&_nc_sid=e99d92&_nc_eui2=AeFiUikvP1fdr5PggpoO1hPYRrkc0-TxxBNGuRzT5PHEE7eh3LUguVkGV7I85qBSnXRNsjCUEjH11-tD_x7xtwEp&_nc_ohc=qv8ASe8oRSIQ7kNvwHTrfz-&_nc_oc=AdrQ4w_GIhs06YJkgg51NTWFDaM4PvzcZmJN2-qyUfOX4dPHsbIWclRMRuC4SE8ArMSPCZ-xeFX4jxMTgzz46bhB&_nc_zt=24&_nc_ht=scontent.fsgn5-15.fna&_nc_gid=5oDkpuuWIEhJ58k_5ZRJMQ&_nc_ss=7b2a8&oh=00_AQOSupgvhOjQ6X3fUcQE8wGY7rMOzsBeX-Chp2nA6SKzrw&oe=6ADFC734"
+            alt="Ảnh đại diện Phạm Đình Khương"
+            class="avatar.jpgh"
+            onerror="this.style.display='none';
+                     document.getElementById('avatarFallback').style.display='flex';"
+        >
+
+        <div class="avatar-fallback" id="avatarFallback">PK</div>
+
+        <h1>PHẠM ĐÌNH KHƯƠNG</h1>
+        <p><strong>Mã số sinh viên:</strong> 231A011185</p>
+        <p><strong>Môn học:</strong> Lập trình Web</p>
+
+        <p class="intro">
+            Chào mừng bạn đến với website học tập của tôi.
+            Trang web tổng hợp kết quả bài tập, các trò chơi
+            tương tác và hướng dẫn sử dụng.
+        </p>
+    </header>
+
+    <!-- DANH SACH BAI TAP -->
+    <main class="container" id="bai-tap">
+
+        <h2 class="section-title">KẾT QUẢ BÀI TẬP</h2>
+        <p class="section-desc">
+            Chọn bài tập bên dưới để xem nội dung chi tiết.
+        </p>
+
+        <div class="task-grid">
+
+            <article class="task-card">
+                <div class="task-icon">📊</div>
+                <h3>Bài tập 27</h3>
+                <p>
+                    Xem kết quả thực hiện bài tập 27,
+                    thông tin kết quả và hình ảnh minh họa.
+                </p>
+
+                <a class="task-link"
+                   href="bai 27.html"
+                   target="_blank" rel="noopener">
+                    Xem kết quả bài 27 →
+                </a>
+            </article>
+
+            <article class="task-card">
+                <div class="task-icon">🎮</div>
+                <h3>Bài tập 28</h3>
+                <p>
+                    Trò chơi kiểm tra tốc độ phản xạ,
+                    ghi điểm khi nhấp vào các mục tiêu.
+                </p>
+
+                <a class="task-link"
+                   href="bai28.html"
+                   target="_blank" rel="noopener">
+                    Chơi bài 28 →
+                </a>
+            </article>
+
+            <article class="task-card">
+                <div class="task-icon">⚡</div>
+                <h3>Bài tập 28a</h3>
+                <p>
+                    Phiên bản trò chơi phản xạ có chức năng
+                    chọn thời gian và thay đổi màu nền.
+                </p>
+
+                <a class="task-link"
+                   href="bai28a.html"
+                   target="_blank" rel="noopener">
+                    Chơi bài 28a →
+                </a>
+            </article>
+
+            <article class="task-card">
+                <div class="task-icon">🏆</div>
+                <h3>Bài tập 28b</h3>
+                <p>
+                    Xem và trải nghiệm phiên bản trò chơi
+                    phản xạ ở bài tập 28b.
+                </p>
+
+                <a class="task-link"
+                   href="bai28b.html"
+                   target="_blank" rel="noopener">
+                    Mở bài 28b →
+                </a>
+            </article>
+
+        </div>
+    </main>
+
+    <!-- HUONG DAN -->
+    <section class="container" id="huong-dan">
+        <div class="info-box">
+            <h2>📘 HƯỚNG DẪN SỬ DỤNG WEBSITE</h2>
+
+            <ol>
+                <li>
+                    Mở trang chủ bằng cách nhấp đúp vào
+                    file <strong>index.html</strong>.
+                </li>
+                <li>
+                    Chọn bài tập 27, 28, 28a hoặc 28b
+                    để mở bài tập tương ứng trong tab mới.
+                </li>
+                <li>
+                    Với các bài trò chơi, đọc hướng dẫn trên
+                    màn hình rồi bấm nút bắt đầu để trải nghiệm.
+                </li>
+                <li>
+                    Nhấn mục <strong>Trang chủ</strong> trên menu
+                    để quay lại phần đầu trang.
+                </li>
+            </ol>
+
+            <p>
+                <strong>Lưu ý:</strong> Các file HTML bài tập phải
+                được đặt cùng thư mục với file index.html.
+            </p>
+        </div>
+    </section>
+
+    <!-- MO TA TRO CHOI -->
+    <section class="container" id="mo-ta">
+        <div class="info-box">
+            <h2>🎯 MÔ TẢ TRÒ CHƠI</h2>
+
+            <p>
+                Các bài tập 28, 28a và 28b là những phiên bản
+                trò chơi kiểm tra tốc độ phản xạ được xây dựng
+                bằng HTML, CSS và JavaScript.
+            </p>
+
+            <p>
+                Người chơi cần nhấp chuột vào các mục tiêu xuất
+                hiện trên màn hình để ghi điểm trong khoảng thời
+                gian quy định. Tùy từng phiên bản, trò chơi có thể
+                có cấp độ, mạng sống, mục tiêu nhiều màu sắc,
+                bộ đếm thời gian hoặc bảng xếp hạng.
+            </p>
+
+            <p>
+                Mục đích là luyện khả năng quan sát, phản ứng nhanh
+                và thực hành xây dựng hiệu ứng tương tác bằng JavaScript.
+            </p>
+        </div>
+    </section>
+
+    <!-- CHAN TRANG -->
+    <footer>
+        <p><strong>PHẠM ĐÌNH KHƯƠNG</strong></p>
+        <p>Mã số sinh viên: 231A011185</p>
+        <p>Website học tập - Lập trình Web</p>
+        <p>© 2026 - Bản quyền nội dung học tập</p>
+    </footer>
+
+</body>
+</html>
